@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forkbase · System Design &amp; Direction</title>
+<style>
+:root{--bg:#0b0e14;--panel:#121721;--panel2:#0e1320;--line:#232c3a;--text:#dbe4ee;--muted:#8b98a9;--blue:#4da3ff;--green:#42c98d;--yellow:#e3b341;--red:#ff7a7a;--purple:#b48cff;--gold:#f0c674}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Inter,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:26px 20px 90px}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+h2{font-size:20px;margin:44px 0 6px;border-bottom:1px solid var(--line);padding-bottom:8px}
+h2 .n{color:var(--blue);margin-right:8px;font-family:ui-monospace,monospace}
+.sub{color:var(--muted);margin:0 0 16px;font-size:13.5px}
+.hero{border:1px solid var(--line);border-radius:16px;padding:30px;background:linear-gradient(140deg,#161022 0%,#0b1017 60%)}
+.hero h1{margin:0 0 6px;font-size:30px;letter-spacing:.3px}
+.hero .tag{color:var(--muted);font-size:15.5px;margin:0 0 18px}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.meta span{font-size:12.5px;border:1px solid var(--line);border-radius:99px;padding:4px 12px;background:var(--panel2)}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+nav a{font-size:12.5px;border:1px solid var(--line);border-radius:99px;padding:5px 12px;color:var(--text);background:var(--panel)}
+nav a:hover{border-color:var(--blue);text-decoration:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px}
+.card h4{margin:0 0 4px;font-size:13.5px}
+.card p{margin:0;font-size:12.5px;color:var(--muted)}
+.card.ok{border-color:#1e5a45}.card.ok h4{color:var(--green)}
+.card.p1{border-color:#2b4a6b}.card.p2{border-color:#1e5a45}.card.p3{border-color:#5a2b4a}.card.p4{border-color:#4a3a1e}
+.card.p1 h4{color:var(--blue)}.card.p2 h4{color:var(--green)}.card.p3 h4{color:var(--purple)}.card.p4 h4{color:var(--gold)}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:var(--panel2);text-align:left}
+.tbl td,.tbl th{border:1px solid var(--line);padding:8px 11px;vertical-align:top}
+.roadmap{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+.ms{display:inline-block;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 16px;margin:4px;text-align:left;min-width:280px;vertical-align:top}
+.ms h4{margin:0 0 4px;font-size:13.5px}
+.ms p{margin:0;font-size:12px;color:var(--muted)}
+.ms.done{border-color:#1e5a45}.ms.done h4{color:var(--green)}
+.ms.next{border-color:#2b4a6b}.ms.next h4{color:var(--blue)}
+.ms.beta{border-color:#5a4a1e}.ms.beta h4{color:var(--gold)}
+.vert{color:var(--muted);font-size:18px;margin:6px 0}
+.par{display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
+.note{border-left:3px solid var(--yellow);background:#1a1a10;border-radius:0 10px 10px 0;padding:10px 14px;font-size:13px;margin:14px 0}
+.note.blue{border-color:var(--blue);background:#0f1826}
+.note.green{border-color:var(--green);background:#0e1a14}
+.quote{font-style:italic;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-size:13.5px}
+.check{list-style:none;padding:0;margin:0}
+.check li{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0;font-size:13.5px;background:var(--panel)}
+.check .you{color:var(--gold);font-weight:600}
+.check .agent{color:var(--blue);font-weight:600}
+code{font-family:ui-monospace,monospace;font-size:12.5px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:760px){.two{grid-template-columns:1fr}}
+footer{margin-top:50px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>Forkbase — System Design &amp; Direction</h1>
+  <p class="tag">What we build, in what order, under which rules. Companion: <a href="ARCHITECTURE.html">ARCHITECTURE.html</a>.</p>
+  <div class="meta">
+    <span>fork · <a href="https://github.com/mrvigneshvt/forkbase">github.com/mrvigneshvt/forkbase</a> <span class="v" style="color:var(--green)">✅ created &amp; cloned</span></span>
+    <span>direction · Linux-first, free mobile, self-host</span>
+    <span>direction · <b style="color:var(--green)">confirmed ✅ 2026-10-14</b></span>
+    <span>generated · 2026-10-14</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#confirm">Sign-offs</a><a href="#pillars">Pillars</a><a href="#decisions">Decisions</a><a href="#roadmap">Roadmap</a><a href="#phases">Phases</a><a href="#discipline">Fork rules</a><a href="#risks">Risks</a><a href="#beta">Beta bar</a><a href="#next">Next actions</a>
+</nav>
+
+<h2 id="confirm"><span class="n">01</span>Sign-offs — all three confirmed</h2>
+<p class="sub">Confirmed 2026-10-14; kept here as the record. Below them: seven facts Phase 1 must establish before the risky slices start.</p>
+<div class="two">
+  <div class="card ok"><h4>✅ Sign-off 1 — Direction pillars</h4><p>Rebrand · Linux-first · free Android · self-host cloud. <b>Locked &amp; confirmed 2026-10-14.</b></p></div>
+  <div class="card ok"><h4>✅ Sign-off 2 — Milestone order</h4><p><b>Linux-first dogfood after M1</b> (D9). M3 self-host + M4a Android triage proceed in the background.</p></div>
+</div>
+<div class="card ok" style="margin-top:10px"><h4>✅ Sign-off 3 — Beta bar</h4><p>Desktop (Linux pkgs + AppImage) + free Android APK + self-host compose + rebrand + no Pro gate. <b>Confirmed 2026-10-14.</b></p></div>
+<p class="sub" style="margin-top:18px"><b>Phase-1 must-establish (source study, no binary RE needed):</b></p>
+<table class="tbl">
+  <tr><th>#</th><th>Open question</th><th>Cleared by</th></tr>
+  <tr><td>1</td><td>Where does the Pro gate live? (<code>apps/gate</code>? <code>packages/auth</code>? cloud account checks?) — note: fork HEAD is a billing commit, gate work is active upstream</td><td>Phase 1a</td></tr>
+  <tr><td>2</td><td>Exact phone → cloud → desktop wiring (relay ↔ host-service ↔ host-client)</td><td>Phase 1b</td></tr>
+  <tr><td>3</td><td>Android blocker inventory (<code>expo run:android</code>: config-plugins, <code>targets/agentactivity</code>, push, certs)</td><td>Phase 1d</td></tr>
+  <tr><td>4</td><td>How hard is self-hosted auth? (mobile's coupling to upstream cloud accounts)</td><td>Phase 1a/b</td></tr>
+  <tr><td>5</td><td>Linux pain log — author's daily AppImage annoyances (the pillar-2 spec)</td><td>dogfood log → 1c</td></tr>
+  <tr><td>6</td><td>Will upstream take generic Linux PRs? (shrinks our diff) — upstream's <code>docs/linux-desktop-acceptance.md</code> is a positive signal</td><td>Phase 0/1 survey</td></tr>
+  <tr><td>7</td><td>Upstream test layout (bun test) — TDD mechanics</td><td>Phase 0</td></tr>
+</table>
+
+<h2 id="pillars"><span class="n">02</span>The four pillars</h2>
+<div class="grid">
+  <div class="card p1"><h4>① Rebrand</h4><p>One scripted, rebasable white-label patch: names, icons, bundle IDs, update feed, telemetry. <b>Done when:</b> dev app shows forkbase identity.</p></div>
+  <div class="card p2"><h4>② First-class Linux</h4><p>AUR + Flatpak/deb + AppImage; <code>/proc</code>-based metrics replacing <code>macos-process-metrics</code>; Wayland/Hyprland: tray, notifications, clipboard, deep links. <b>Done when:</b> clean install on a fresh Arch box, author dogfoods daily. <b>Priority track (D9).</b></p></div>
+  <div class="card p3"><h4>③ Free Android</h4><p>Enable the in-repo Expo app on Android; upstream is iOS-only + Pro-gated. <b>Done when:</b> APK installs, phone reviews agents against your own cloud.</p></div>
+  <div class="card p4"><h4>④ Self-host cloud</h4><p>Docker compose for api/gate/relay/realtime/review-host/usercontent; local accounts; Pro checks gone. <b>Done when:</b> desktop remote access works over LAN with zero upstream cloud.</p></div>
+</div>
+
+<h2 id="decisions"><span class="n">03</span>Decision log — D1–D9 (accepted)</h2>
+<table class="tbl">
+  <tr><th>ID</th><th>Decision</th><th>Why / consequence</th></tr>
+  <tr><td>D1</td><td><b>Fork &amp; rebrand</b> (not clean-room, not hybrid core)</td><td>Whole product incl. mobile client + cloud stack is open (ELv2). Velocity wins; inherited code keeps ELv2; upstream sync becomes a standing cost.</td></tr>
+  <tr><td>D2</td><td><b>Bun + TypeScript</b></td><td>Upstream's own stack — every pattern maps 1:1, toolchain reused.</td></tr>
+  <tr><td>D3</td><td><b>Linux-first</b> is the differentiating direction</td><td>Author = target user (Arch/Omarchy daily driver); upstream is macOS-primary. Dogfood log is the spec.</td></tr>
+  <tr><td>D4</td><td><b>Free Android</b> via in-repo Expo app</td><td>Distribution gap, not architecture. Porting work: iOS patches, native modules, push, certs.</td></tr>
+  <tr><td>D5</td><td><b>Self-hosted cloud</b> replaces the Pro cloud</td><td>Kills the gate; beta open. Hardest unknown: auth coupling.</td></tr>
+  <tr><td>D6</td><td><b>License stance</b></td><td>Inherited stays ELv2 (cannot relicense); new code = own terms; no selling repackaged fork as a hosted service.</td></tr>
+  <tr><td>D7</td><td><b>Fork discipline</b></td><td>Seams not edits · one rebasable rebrand patch · conscious hard-fork moment · generic Linux fixes go upstream.</td></tr>
+  <tr><td>D8</td><td><b>REA demoted</b> to optional gap-fill</td><td>Source-first. AppImage-vs-source and runtime protocol checks only where source can't answer.</td></tr>
+  <tr><td>D9</td><td><b>Milestone order: Linux-first dogfood</b></td><td>After M1, M2 wins resource conflicts; M3/M4a run in background. Confirmed 2026-10-14.</td></tr>
+</table>
+
+<h2 id="roadmap"><span class="n">04</span>Milestone roadmap</h2>
+<p class="sub">M2, M3, M4a run as parallel tracks after M1 (M2 gets priority per D9). M4b needs M3 + M4a; the beta needs M2 + M4b.</p>
+<div class="roadmap">
+  <div class="ms done"><h4>M0 · Baseline 🟡 (2 of 6 done)</h4><p>Fork created ✅ · cloned ✅. Remaining: prereqs (bun/docker/jq/gh) · <code>setup.local.sh</code> + <code>bun run dev</code> boots on Arch · docs sweep · rebrand inventory.</p></div>
+  <div class="vert">↓</div>
+  <div class="ms next"><h4>M1 · Rebrand patch</h4><p>White-label script applied; forkbase identity in dev app. <i>Depends: M0.</i></p></div>
+  <div class="vert">↓&nbsp;&nbsp;&nbsp;then three parallel tracks — M2 has priority</div>
+  <div class="par">
+    <div class="ms" style="border-color:#1e5a45"><h4>M2 · Linux v1 ⭐ priority</h4><p>AUR + AppImage clean · /proc metrics · Hyprland verified (tray/notifications/clipboard/deep links). <i>Depends: M1.</i></p></div>
+    <div class="ms"><h4>M3 · Self-host cloud</h4><p>Compose up · local accounts · Pro gate gone · remote access over LAN. <i>Depends: M1.</i></p></div>
+    <div class="ms"><h4>M4a · Android triage</h4><p><code>expo run:android</code> status + blocker list. <i>Depends: M0 only — starts early.</i></p></div>
+  </div>
+  <div class="vert">↓</div>
+  <div class="ms"><h4>M4b · Android E2E</h4><p>Phone → self-host cloud → desktop: browse agents, read diffs, approve. <i>Depends: M3 + M4a.</i></p></div>
+  <div class="vert">↓</div>
+  <div class="ms beta"><h4>M5 · BETA 🚀</h4><p>GitHub releases: Linux packages + free APK · ELv2 + attribution · forkbase README/docs. <i>Depends: M2 + M4b.</i></p></div>
+</div>
+
+<h2 id="phases"><span class="n">05</span>Phase plan</h2>
+<table class="tbl">
+  <tr><th>Phase</th><th>Work</th><th>Exit</th></tr>
+  <tr><td>0 Baseline <span style="color:var(--green)">🟡 in progress</span></td><td>✅ Fork · ✅ Clone · prereqs · <code>setup.local.sh</code> + <code>bun run dev</code> · docs sweep (llms-full.txt, DEVELOPMENT.md) · rebrand inventory</td><td>Dev app boots from source on Arch</td></tr>
+  <tr><td>1 Deep-dives</td><td>(a) Pro gate <code>gate/auth/cloud-client</code> · (b) remote chain <code>host-service/relay/realtime/api</code> · (c) Linux audit: platform branches, packaging, metrics, Wayland · (d) Android audit</td><td>Subsystem maps + blocker lists</td></tr>
+  <tr><td>2 REA (optional)</td><td>Shipped AppImage 1.37.0 vs repo main · passive protocol confirmation (creds excluded)</td><td>Closed-gap answers only</td></tr>
+  <tr><td>3 Design doc</td><td>Build slices · beta definition · self-host deployment · APK distribution · hard-fork timing</td><td>A plan a fresh agent runs cold</td></tr>
+  <tr><td>4 Build</td><td>Rebrand → Linux packaging + metrics → un-gate + self-host → Android → phone E2E (TDD throughout; M2 priority per D9)</td><td>Beta</td></tr>
+</table>
+
+<h2 id="discipline"><span class="n">06</span>Fork discipline — binding rules (D7)</h2>
+<div class="grid">
+  <div class="card"><h4>1 · Seams, not edits</h4><p>New code lives in <code>packages/forkbase-*</code> and plugin mechanisms — never inline-edit upstream where a config seam works.</p></div>
+  <div class="card"><h4>2 · One rebrand patch</h4><p>All white-label edits live in a single scripted, rebasable patch — never scattered.</p></div>
+  <div class="card"><h4>3 · Conscious hard-fork moment</h4><p>Track upstream until beta is stable; then pick a divergence commit and own it. No drift.</p></div>
+  <div class="card"><h4>4 · Generic fixes go upstream</h4><p>Linux fixes upstream will accept become PRs to superset-sh/superset. Every merge shrinks our diff.</p></div>
+</div>
+<div class="note green"><b>Cadence:</b> weekly upstream sync (merge upstream main → run suite → rebase rebrand patch → merge to forkbase main).</div>
+
+<h2 id="risks"><span class="n">07</span>Risks</h2>
+<table class="tbl">
+  <tr><th>Risk</th><th>Reality check</th><th>Mitigation</th></tr>
+  <tr><td>Fork maintenance treadmill</td><td>Upstream ships daily (~500 open PRs)</td><td>D7 discipline; upstream PRs shrink the diff</td></tr>
+  <tr><td>Android ≠ free enablement</td><td>iOS patches + native modules = real porting weeks</td><td>M4a triage before any estimate</td></tr>
+  <tr><td>Auth is the crux</td><td>Mobile presumes upstream cloud accounts (unverified); billing work is active upstream (fork HEAD is a billing commit)</td><td>Phase 1a/b before any auth build slice</td></tr>
+  <tr><td>License constraints</td><td>Inherited code can't become MIT; no SaaS resale of repackaged fork</td><td>D6; new code carries own terms</td></tr>
+  <tr><td>Linux Electron quirks</td><td>Wayland/tray/notification bugs upstream may never see</td><td>Author's pain log; upstream what upstream accepts</td></tr>
+</table>
+
+<h2 id="beta"><span class="n">08</span>Beta bar (confirmed)</h2>
+<div class="quote"><b>Forkbase beta =</b> desktop app with Linux packages (AUR + AppImage) + free Android APK + self-host docker compose — all published under ELv2 (+ own license for new code), rebrand applied, Pro gate removed in self-host mode, with attribution to Superset preserved.</div>
+
+<h2 id="next"><span class="n">09</span>Next actions</h2>
+<ul class="check">
+  <li><span class="you">You:</span> start the Linux pain log — every annoyance in today's AppImage, one line each. It's the M2 spec (the priority track).</li>
+  <li><span class="agent">Agent:</span> Phase 0 remaining: prereqs (bun/docker/jq/gh) · <code>setup.local.sh</code> · <code>bun run dev</code> boots on Arch · docs sweep · rebrand inventory.</li>
+  <li><span class="agent">Agent:</span> commit this planning context to the fork (pending author OK), then start the weekly upstream-sync cadence once the rebrand patch lands.</li>
+</ul>
+
+<footer>
+  Companion: <a href="ARCHITECTURE.html">ARCHITECTURE.html</a>. Source records (same directory): decisions/0001-foundation.md (D1–D9 full rationale) · plans/0001-forkbase-build-plan.md · research/2026-10-14-superset-recon.md (verified/inferred evidence).<br>
+  Forkbase planning · 2026-10-14 · direction confirmed — living record.
+</footer>
+</div>
+</body>
+</html>

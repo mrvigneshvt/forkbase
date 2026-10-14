@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forkbase · Architecture</title>
+<style>
+:root{--bg:#0b0e14;--panel:#121721;--panel2:#0e1320;--line:#232c3a;--text:#dbe4ee;--muted:#8b98a9;--blue:#4da3ff;--green:#42c98d;--yellow:#e3b341;--red:#ff7a7a;--purple:#b48cff;--gold:#f0c674}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Inter,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:26px 20px 90px}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+h2{font-size:20px;margin:44px 0 6px;border-bottom:1px solid var(--line);padding-bottom:8px}
+h2 .n{color:var(--blue);margin-right:8px;font-family:ui-monospace,monospace}
+.sub{color:var(--muted);margin:0 0 16px;font-size:13.5px}
+.hero{border:1px solid var(--line);border-radius:16px;padding:30px;background:linear-gradient(140deg,#111a2b 0%,#0b1017 60%)}
+.hero h1{margin:0 0 6px;font-size:30px;letter-spacing:.3px}
+.hero .tag{color:var(--muted);font-size:15.5px;margin:0 0 18px}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.meta span{font-size:12.5px;border:1px solid var(--line);border-radius:99px;padding:4px 12px;background:var(--panel2)}
+.legend{margin-top:16px;font-size:13px;color:var(--muted)}
+.legend b{font-weight:600}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+nav a{font-size:12.5px;border:1px solid var(--line);border-radius:99px;padding:5px 12px;color:var(--text);background:var(--panel)}
+nav a:hover{border-color:var(--blue);text-decoration:none}
+.diagram{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:22px}
+.flow{display:flex;gap:12px;justify-content:center;align-items:stretch;flex-wrap:wrap}
+.node{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;flex:1;min-width:200px}
+.node h4{margin:0 0 4px;font-size:14px}
+.node p{margin:0;font-size:12.5px;color:var(--muted)}
+.node.acc{border-color:#2b4a6b}.node.acc h4{color:var(--blue)}
+.node.gold{border-color:#5a4a1e}.node.gold h4{color:var(--gold)}
+.wide{width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.chip{font-size:12px;border:1px solid var(--line);border-radius:99px;padding:3px 11px;background:var(--panel)}
+.chip i{color:var(--muted);font-style:normal}
+.down{text-align:center;color:var(--muted);font-size:12px;margin:8px 0;padding:2px 0}
+.down b{color:var(--blue);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px}
+.card h4{margin:0 0 4px;font-size:13.5px}
+.card p{margin:0;font-size:12.5px;color:var(--muted)}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:var(--panel2);text-align:left}
+.tbl td,.tbl th{border:1px solid var(--line);padding:8px 11px;vertical-align:top}
+.tbl td:first-child{white-space:nowrap}
+.v{color:var(--green);font-weight:600}.i{color:var(--yellow);font-weight:600}.r{color:var(--red);font-weight:600}
+.note{border-left:3px solid var(--yellow);background:#1a1a10;border-radius:0 10px 10px 0;padding:10px 14px;font-size:13px;color:var(--text);margin:14px 0}
+.note.blue{border-color:var(--blue);background:#0f1826}
+.note.green{border-color:var(--green);background:#0e1a14}
+.quote{font-style:italic;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-size:13.5px}
+footer{margin-top:50px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:12.5px}
+code{font-family:ui-monospace,monospace;font-size:12.5px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:760px){.two{grid-template-columns:1fr}}
+@media(max-width:760px){.node{min-width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>Forkbase — Architecture</h1>
+  <p class="tag">A fork of <a href="https://github.com/superset-sh/superset">superset-sh/superset</a> taken in its own direction: <b>the Linux-first, free-mobile Superset.</b></p>
+  <div class="meta">
+    <span>fork · <a href="https://github.com/mrvigneshvt/forkbase">github.com/mrvigneshvt/forkbase</a></span>
+    <span>license · Elastic License 2.0 (inherited)</span>
+    <span>stack · Bun + TypeScript (turbo monorepo)</span>
+    <span>status · Phase 0 started · direction confirmed ✅</span>
+    <span>generated · 2026-10-14</span>
+  </div>
+  <p class="legend"><b>Legend</b> — <span class="v">✅ verified</span> this session (GitHub fetch / local shell) · <span class="i">🔶 inferred</span> from names, Phase 1 confirms · upstream ships daily (~500 open PRs, 4,909 commits).</p>
+</header>
+
+<nav>
+  <a href="#context">System context</a><a href="#surfaces">Surfaces</a><a href="#monorepo">Monorepo map</a><a href="#remote">Mobile chain</a><a href="#state">State &amp; data</a><a href="#local">Local install</a><a href="#forkmodel">Fork model</a><a href="#license">License</a>
+</nav>
+
+<h2 id="context"><span class="n">01</span>System context</h2>
+<p class="sub">Planned architecture. The exact phone → cloud → desktop wiring is <span class="i">🔶 Phase 1b</span>; everything boxed below exists in the open repo.</p>
+<div class="diagram">
+  <div class="flow">
+    <div class="node acc"><h4>🖥 Desktop — <code>apps/desktop</code> (Electron)</h4><p>Workspaces, terminals, diff viewer, browser panes, skills. <b>Linux-first packaging</b> (forkbase pillar 2).</p></div>
+    <div class="node acc"><h4>📱 Android — <code>apps/mobile</code> (Expo · React Native)</h4><p>Review agents on the go: workspaces, diffs, approvals. <b>Free</b> (forkbase pillar 3); upstream ships iOS-only, Pro-gated.</p></div>
+  </div>
+  <div class="down">↓ &nbsp; <b>packages/host-service</b> (desktop side) &nbsp; · &nbsp; ↓ &nbsp; <b>packages/host-client</b> (phone side) &nbsp;<span class="i">🔶</span></div>
+  <div class="flow"><div class="node gold wide"><h4>☁ Self-hosted cloud — replaces the Superset Pro cloud (pillar 4)</h4><p>Runs in Docker (Postgres + Redis). Your accounts, no Pro gate, no vendor.</p>
+    <div class="chips">
+      <span class="chip"><code>apps/api</code> <i>API</i> <span class="v">✅</span></span>
+      <span class="chip"><code>apps/gate</code> <i>auth/billing gate?</i> <span class="i">🔶</span></span>
+      <span class="chip"><code>apps/relay</code> <i>remote tunnel?</i> <span class="i">🔶</span></span>
+      <span class="chip"><code>apps/realtime</code> <i>live updates?</i> <span class="i">🔶</span></span>
+      <span class="chip"><code>apps/review-host</code> <i>page/PR hosting?</i> <span class="i">🔶</span></span>
+      <span class="chip"><code>apps/usercontent</code> <i>content hosting?</i> <span class="i">🔶</span></span>
+    </div></div></div>
+  <div class="down">↓ &nbsp; PTYs · workspace sessions · file watching</div>
+  <div class="flow">
+    <div class="node"><h4>🌳 Git worktrees</h4><p>One worktree + branch per task. Superset's core primitive.</p></div>
+    <div class="node"><h4>⌨ PTY daemon + terminal host</h4><p><code>packages/pty-daemon</code>, <code>terminal-host.sock</code>, terminal presets.</p></div>
+    <div class="node"><h4>🤖 15 agent CLI shims</h4><p>claude · codex · opencode · gemini · cursor-agent · droid · … bring-your-own subscriptions.</p></div>
+  </div>
+</div>
+
+<h2 id="surfaces"><span class="n">02</span>Surfaces — one backend, four doors</h2>
+<p class="sub">✅ upstream README: "Every surface talks to the same workspaces."</p>
+<div class="grid">
+  <div class="card"><h4>Desktop app</h4><p>The full IDE: terminals, diff viewer, in-app browser, automations.</p></div>
+  <div class="card"><h4>CLI <code>packages/cli</code></h4><p>Manage workspaces, agents, terminals, hosts from any shell.</p></div>
+  <div class="card"><h4>TS SDK <code>packages/sdk</code></h4><p><code>@superset_sh/sdk</code> — Node/Bun/Deno programmatic control.</p></div>
+  <div class="card"><h4>MCP server <code>packages/mcp</code></h4><p>Agents manage workspaces themselves.</p></div>
+</div>
+
+<h2 id="monorepo"><span class="n">03</span>Monorepo map — what we inherited</h2>
+<p class="sub">✅ 11 apps · 26 packages, verified from the public tree. Roles marked <span class="i">🔶</span> are name-inferred.</p>
+<div class="grid">
+  <div class="card"><h4>api <span class="v">✅</span></h4><p>Cloud API app.</p></div>
+  <div class="card"><h4>desktop <span class="v">✅</span></h4><p>Electron IDE. Forkbase's Linux-first target.</p></div>
+  <div class="card"><h4>mobile <span class="v">✅</span></h4><p>Expo/RN client — expo-router, EAS, config-plugins. Android = enable, not rewrite.</p></div>
+  <div class="card"><h4>gate <span class="i">🔶</span></h4><p>Suspected Pro/billing gate — Phase 1a target.</p></div>
+  <div class="card"><h4>relay <span class="i">🔶</span></h4><p>Suspected remote-access tunnel.</p></div>
+  <div class="card"><h4>realtime <span class="i">🔶</span></h4><p>Suspected live-update layer.</p></div>
+  <div class="card"><h4>review-host / usercontent <span class="i">🔶</span></h4><p>Suspected Pages / PR-review content hosting.</p></div>
+  <div class="card"><h4>docs / web / marketing <span class="v">✅</span></h4><p>Docs site (Fumadocs), web app, marketing site.</p></div>
+</div>
+<p class="sub" style="margin-top:14px">Key packages: <span class="chip"><code>host-service</code> / <code>host-client</code> — remote chain</span> <span class="chip"><code>auth</code> + <code>cloud-client</code> — Pro-gate suspects</span> <span class="chip"><code>pty-daemon</code> — terminals</span> <span class="chip"><code>local-db</code> — local state</span> <span class="chip"><code>macos-process-metrics</code> — <b style="color:var(--gold)">macOS-only → Linux replacement needed (pillar-2 first slice)</b></span> <span class="chip"><code>trpc</code> · <code>workspace-client</code> · <code>workspace-fs</code> · <code>sdk</code> · <code>mcp</code> · <code>cli</code> · <code>panes</code> · <code>sandbox</code> · <code>port-scanner</code> + 11 more</span></p>
+
+<h2 id="remote"><span class="n">04</span>Mobile &amp; remote-access chain — the gap forkbase fills</h2>
+<p class="sub">✅ upstream README: "Mobile requires <b>Superset Pro</b>, iOS 26 or later, and a computer with Remote Access enabled."</p>
+<div class="two">
+  <div class="card"><h4>Upstream today</h4><p>📱 iPhone only · ☁ their hosted Pro cloud · 💰 subscription-gated · 🐧 Linux desktop "experimental" · 🪟 Windows none.</p></div>
+  <div class="card"><h4>Forkbase tomorrow</h4><p>🤖 Android free (in-repo Expo app enabled) · ☁ self-hosted compose · 💰 zero gate · 🐧 Linux first-class · same desktop code.</p></div>
+</div>
+<div class="note blue"><b>Why this is a distribution problem, not an architecture problem:</b> both the mobile client (<code>apps/mobile</code> ✅ Expo/RN) and the entire cloud stack (<code>api/gate/relay/realtime/review-host/usercontent</code> ✅ in repo) are open. The paywall lives in <i>their</i> hosted accounts — <span class="i">🔶 exact gate location = Phase 1a</span>.</div>
+
+<h2 id="state"><span class="n">05</span>State &amp; data — what lives where</h2>
+<table class="tbl">
+  <tr><th>Store</th><th>Contents</th><th>Status</th></tr>
+  <tr><td><code>~/.superset/</code></td><td><code>local.db</code> (SQLite + wal/shm) · <code>app-state.json</code> · <code>sessions/</code> · <code>worktrees/</code> · <code>hooks/</code> · <code>terminal-host.sock/.pid/.token</code> · <code>plugins/</code> · <code>host/</code> · <code>daemon.log</code></td><td><span class="v">✅ verified on this machine</span></td></tr>
+  <tr><td>Dev cloud (Docker)</td><td>Postgres + neon-proxy + Redis, seeded dev account (<code>admin@local.test</code> / <code>supersetdev</code>) via <code>setup.local.sh</code> — no third-party creds</td><td><span class="v">✅ upstream README</span></td></tr>
+  <tr><td>Shipped binary</td><td>AppImage resources contain <code>chat-migrations/</code>, <code>host-migrations/</code>, <code>migrations/</code> — DB schema ships in the binary</td><td><span class="v">✅ mount inspected</span></td></tr>
+  <tr><td>Secrets</td><td><code>auth-token.enc</code> exists — <b>never opened, never will be</b> in planning</td><td><span class="r">do not touch</span></td></tr>
+</table>
+
+<h2 id="local"><span class="n">06</span>Local install — ground-truth evidence</h2>
+<div class="two">
+  <div class="card"><h4>Installed app ✅</h4><p><code>~/Applications/Superset.AppImage</code> — 413,300,973 bytes, Electron (chrome-sandbox, crashpad, .pak files), CLI reports 1.37.0 via a shim into the AppImage mount. Runs daily on the author's machine: <b>Omarchy · Arch · Hyprland</b>.</p></div>
+  <div class="card"><h4>Agent shims ✅</h4><p><code>~/.superset/bin/</code> — 15 shims: amp, claude, codex, copilot, cursor-agent, devin, droid, gemini, grok, kimi, mastracode, muse, opencode, ufo, vibe. Any terminal agent works like a built-in.</p></div>
+</div>
+
+<h2 id="forkmodel"><span class="n">07</span>The fork model — seams, not edits</h2>
+<p class="sub">How "own direction" survives upstream shipping daily. Binding rule D7.</p>
+<div class="diagram">
+  <div class="flow">
+    <div class="node"><h4>upstream <code>superset-sh/superset</code></h4><p>main · ships daily · ~500 open PRs</p></div>
+    <div class="down">→ merge weekly →</div>
+    <div class="node acc"><h4>forkbase diff (the only edits)</h4><p>① white-label patch script (names · icons · bundle IDs · update feed · telemetry)<br>② <code>packages/forkbase-*</code> — new code, own license<br>③ Android enablement in <code>apps/mobile</code><br>④ self-host compose + un-gate</p></div>
+    <div class="down">→</div>
+    <div class="node gold"><h4><code>mrvigneshvt/forkbase</code> main</h4><p>generic Linux fixes flow <b>back upstream</b> as PRs — every merge shrinks the diff</p></div>
+  </div>
+</div>
+<div class="note green"><b>Conscious hard-fork moment:</b> track upstream until the beta is stable, then pick a divergence commit and own it (security cherry-picks only). Drift-into-divergence is forbidden.</div>
+
+<h2 id="license"><span class="n">08</span>License layer</h2>
+<div class="two">
+  <div class="card"><h4>Inherited code — stays Elastic License 2.0</h4><p>Cannot be relicensed (ever). Use, fork, modify, self-host: free. One prohibition below.</p></div>
+  <div class="card"><h4>Forkbase's new code — author's choice</h4><p>Android additions, <code>packages/forkbase-*</code>, self-host tooling: any license on top.</p></div>
+</div>
+<div class="quote">"use it, fork it, modify it, self-host it for your team. The only thing off the table is repackaging Superset itself as a service you sell to others." — upstream README ✅</div>
+<div class="note">Consequence for the open beta: publish freely, distribute the Android APK freely, self-host freely. If forkbase is ever commercial, the repackaged-fork-as-a-hosted-service route is prohibited — own additions can be monetized freely.</div>
+
+<footer>
+  Companion: <a href="SYSTEM_DESIGN.html">SYSTEM_DESIGN.html</a> (roadmap · decisions · risks · confirm-first checklist).<br>
+  Source records (same directory): README · STATUS · KNOWN-GAPS · decisions/0001-foundation (D1–D9) · plans/0001-forkbase-build-plan · research/2026-10-14-superset-recon.<br>
+  Forkbase planning · 2026-10-14 · evidence: live GitHub fetches + local shell inspection, this session.
+</footer>
+</div>
+</body>
+</html>
