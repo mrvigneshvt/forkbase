@@ -35,4 +35,4 @@ Direction confirmed (2026-10-14): pillars · milestone order (**Linux-first dogf
 
 ## Where this lives
 
-This `docs/agent-context/` is inside the fork itself — [github.com/mrvigneshvt/forkbase](https://github.com/mrvigneshvt/forkbase) — and travels with the code. Local clone: `~/Workspace/forkbase` (remotes: `origin` = fork, `upstream` = superset-sh/superset). The original planning worktree (`~/.superset/worktrees/forkbase/nebula-earthworm-c986f9aa`) was emptied after consolidation on 2026-10-14.
+This `docs/agent-context/` is inside the fork itself — [github.com/mrvigneshvt/forkbase](https://github.com/mrvigneshvt/forkbase) — and travels with the code. Local clone: `~/Workspace/Projects/personal/forkbase` (remotes: `origin` = fork, `upstream` = superset-sh/superset). The original planning worktree (`~/.superset/worktrees/forkbase/nebula-earthworm-c986f9aa`) was emptied after consolidation on 2026-10-14.

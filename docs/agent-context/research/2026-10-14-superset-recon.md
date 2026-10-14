@@ -44,4 +44,4 @@ Legend: ✅ verified this session · 🔶 inferred (name/shape suggests it; Phas
 - ❌ No reading of `local.db` contents (paths listed only).
 - ❌ No secrets accessed: `auth-token.enc` and credential files were never opened.
 
-**Postscript (2026-10-14, later same day):** the fork was cloned to `~/Workspace/forkbase` — source reading is now possible, and this ❌ list is historical for the planning session only.
+**Postscript (2026-10-14, later same day):** the fork was cloned (now at `~/Workspace/Projects/personal/forkbase`) — source reading is now possible, and this ❌ list is historical for the planning session only.

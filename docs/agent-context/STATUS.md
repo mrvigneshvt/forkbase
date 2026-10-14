@@ -3,7 +3,7 @@
 ## Current state
 
 - 2026-10-14: Direction confirmed (all three sign-offs: pillars, milestone order, beta bar). Fork created and cloned; all planning docs + `ARCHITECTURE.html` + `SYSTEM_DESIGN.html` consolidated into this directory. Phase 0 started — 2 of 6 steps done.
-- Local clone: `~/Workspace/forkbase` · remotes: `origin` = mrvigneshvt/forkbase, `upstream` = superset-sh/superset.
+- Local clone: `~/Workspace/Projects/personal/forkbase` · remotes: `origin` = mrvigneshvt/forkbase, `upstream` = superset-sh/superset.
 - Fork HEAD at consolidation: `cc31d024c` — note: upstream's billing work is active (`feat: move billing to Autumn…`), relevant intel for the Phase 1a gate hunt.
 
 ## Next step
@@ -24,3 +24,4 @@ Also pending from the author: the **Linux pain log** — one line per annoyance 
 
 - **2026-10-14 (1)** — Recon + planning session. Direction locked: fork & rebrand → Linux-first + free Android + self-hosted cloud; Bun + TS. Agent-context docs written.
 - **2026-10-14 (2)** — Fork created: [github.com/mrvigneshvt/forkbase](https://github.com/mrvigneshvt/forkbase) (clears old fork-location gap). Cloned to `~/Workspace/forkbase` with `upstream` remote. Milestone order confirmed: **Linux-first dogfood after M1** (recorded as D9). Planning docs + both HTMLs moved from the planning worktree and `~/.opencode/plan` into this directory; worktree emptied. Package count corrected (25 → 26). Next: Phase 0 remaining steps.
+- **2026-10-14 (3)** — Repo clone relocated: `~/Workspace/forkbase` → `~/Workspace/Projects/personal/forkbase`, replacing an empty placeholder repo (deleted, author-approved). Session cwd moved with it. Path references synced in agent-context (`docs: fix local clone path after relocation`).

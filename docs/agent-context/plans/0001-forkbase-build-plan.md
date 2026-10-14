@@ -32,7 +32,7 @@ Unverified: the exact request flow phone → cloud → desktop is a Phase 1b del
 **Exit: forkbase dev app boots from source on Linux.**
 
 1. ✅ Done 2026-10-14 — fork created: [github.com/mrvigneshvt/forkbase](https://github.com/mrvigneshvt/forkbase).
-2. ✅ Done 2026-10-14 — cloned to `~/Workspace/forkbase`; remotes: `origin` (fork) + `upstream` (superset-sh/superset). Next: verify prereqs — `bun` (pinned in upstream `.bun-version`), `docker`, `jq`, `gh`.
+2. ✅ Done 2026-10-14 — cloned (now at `~/Workspace/Projects/personal/forkbase`); remotes: `origin` (fork) + `upstream` (superset-sh/superset). Next: verify prereqs — `bun` (pinned in upstream `.bun-version`), `docker`, `jq`, `gh`.
 3. `./.superset/setup.local.sh` — brings up local Postgres + neon-proxy + Redis via Docker, seeds the dev account (upstream README: "Sign in as dev", or `admin@local.test` / `supersetdev`; no third-party credentials needed).
 4. `bun run dev` — verify the dev desktop app runs alongside the installed AppImage (setup.local.sh assigns per-workspace identity/ports for exactly this).
 5. Docs sweep: `https://docs.superset.sh/llms-full.txt`, `DEVELOPMENT.md`, `CONTRIBUTING.md`.

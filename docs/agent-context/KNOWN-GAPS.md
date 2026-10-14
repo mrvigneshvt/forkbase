@@ -15,7 +15,7 @@ Live list of acknowledged unknowns and deliberate exclusions. Remove each entry 
 
 ## Resolved
 
-- 2026-10-14 — old gap "Fork GitHub owner/location unknown": fork created at [github.com/mrvigneshvt/forkbase](https://github.com/mrvigneshvt/forkbase), cloned to `~/Workspace/forkbase`. Recorded in STATUS ledger (2).
+- 2026-10-14 — old gap "Fork GitHub owner/location unknown": fork created at [github.com/mrvigneshvt/forkbase](https://github.com/mrvigneshvt/forkbase), cloned (now at `~/Workspace/Projects/personal/forkbase`). Recorded in STATUS ledger (2).
 
 ## Deliberate exclusions (decisions, not gaps)
 
